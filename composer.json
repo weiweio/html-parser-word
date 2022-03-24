@@ -1,0 +1,27 @@
+{
+  "name": "zmh/html-parser-word",
+  "license": "MIT",
+  "description": "html解析成word样式，html parse word,支持解析mathml",
+  "type": "library",
+  "keywords": [
+    "html",
+    "word",
+    "xml",
+    "officexml"
+  ],
+  "authors": [
+    {
+      "name": "zhangmenghua",
+      "email": "993187039@qq.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "HtmlToWord\\": "src"
+    }
+  }
+}
