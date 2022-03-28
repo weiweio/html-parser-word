@@ -145,6 +145,8 @@ class Parse
         $html = str_replace('&', '&amp;', $html);
         $html = str_replace(array('_lt_', '_gt_', '_amp_'), array('&lt;', '&gt;', '&amp;'), $html);
         $html = str_replace('<br>', '<br />', $html);
+        //math标签中将指定的特殊字符转换为HTML实体
+        $html = str_replace('><<', '>&lt;<', $html);
         //检查img标签是否闭合
         preg_match_all('/<img([^\/].*?)src=\"(.*?)\"(.*?)>/is', $html, $match);
         foreach ($match[0] as $img) {
@@ -299,7 +301,7 @@ class Parse
             //wrpr结束
             $wr .= Word::RPR_END;
             //替换特殊字符
-            $value = str_replace(array('<', '>'), array('＜', '＞'), $value);
+            $value = str_replace(array('<', '>'), array('&lt;', '&gt;'), $value);
             $wr .= "<w:t>{$value}</w:t>";
             //wr结束
             $wr .= Word::WR_END;
@@ -388,6 +390,8 @@ class Parse
         }
         //加载mathml标签
         $domDocument = new DOMDocument();
+        //替换命名空间
+        $mathml = str_replace(":mml", '', $mathml);
         $domDocument->loadXML($mathml);
         $omml = $processor->transformToXml($domDocument);
         $omml = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $omml);
