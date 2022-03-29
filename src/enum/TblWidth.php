@@ -28,4 +28,6 @@ final class TblWidth
 
     //Width in Twentieths of a Point
     const TWIP = 'dxa';
+
+    const VALUE = 8305;
 }

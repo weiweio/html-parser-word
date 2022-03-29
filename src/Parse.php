@@ -504,7 +504,7 @@ class Parse
             $width = $elementStyles['width'];
             $unit = $elementStyles['unit'];
         } else {
-            $width = 8305;
+            $width = TblWidth::VALUE;
             $unit = TblWidth::TWIP;
         }
         //表格属性
@@ -782,7 +782,7 @@ class Parse
                         //any other, wich is a multiplier. E.g. 1.2
                         $spacingLineRule = LineSpacingRule::AUTO;
                         //we are subtracting 1 line height because the Spacing writer is adding one line
-                        $spacing = ($cValue * $line_height) - $line_height;
+                        $spacing = 0;
                     }
                     $styles['spacingLineRule'] = $spacingLineRule;
                     $styles['line-spacing'] = $spacing;
@@ -1008,12 +1008,22 @@ class Parse
             $this->relationshipStr[] = self::replaceStr(Word::RELATIONSHIP, $data);
             //正文图片信息
             //图片样式
-            $styleString = "width:{$style['width']};height:{$style['height']};";
-            //表明设置了浮动样式
+            $imageStyle = [
+                'width:' . $style['width'],
+                'height:' . $style['height']
+            ];
             if (isset($style['hPos'])) {
-                $styleString .= "margin-left:0pt; margin-top:0pt;position:{$style['pos']};mso-position-horizontal:{$style['hPos']};mso-position-vertical:top;mso-position-horizontal-relative:{$style['hPosRelTo']}; mso-position-vertical-relative:line;";
+                $imageStyle = array_merge($imageStyle, [
+                    'margin-left:0pt',
+                    'margin-top:0pt',
+                    'position:' . $style['pos'],
+                    'mso-position-horizontal:' . $style['hPos'],
+                    'mso-position-vertical:top',
+                    'mso-position-horizontal-relative:' . $style['hPosRelTo'],
+                    'mso-position-vertical-relative:line'
+                ]);
             }
-            $this->body .= self::replaceStr(Word::DOCUMENT_PIC_MARK, [$id, $styleString, $id]);
+            $this->body .= self::replaceStr(Word::DOCUMENT_PIC_MARK, [$id, implode(';', $imageStyle), $id]);
             //pkgpart信息
             $this->pkgpartStr[] = self::replaceStr(Word::PKG_PART, [$image, $suffix, $base64Image]);
         }
